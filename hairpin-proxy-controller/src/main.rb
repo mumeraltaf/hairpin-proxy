@@ -24,7 +24,7 @@ class HairpinProxyController
     @ingresses= Hash.new
     @namespace= ENV.fetch('POD_NAMESPACE','hairpin-proxy')
 
-    @image='sumcumo/hairpin-proxy-haproxy' #'sumcumo/hairpin-proxy-haproxy'
+    @image='uomumeraltaf/hairpin-proxy-haproxy' #'sumcumo/hairpin-proxy-haproxy'
     @version=VERSION
     @addr_to_proxy_svc = Hash.new { |hash,key| hash[key] = proxy_service_name(key) }
 
@@ -73,7 +73,7 @@ class HairpinProxyController
   def check_and_rewrite_coredns
     @log.info("Polling all Ingress resources and CoreDNS configuration...")
     hosts = fetch_ingress_hosts
-    cm = @k8s.api.resource("configmaps", namespace: "kube-system").get("coredns")
+    cm = @k8s.api.resource("configmaps", namespace: "kube-system").get("rke2-coredns-rke2-coredns")
 
     old_corefile = cm.data.Corefile
     new_corefile = coredns_corefile_with_rewrite_rules(old_corefile, hosts)
